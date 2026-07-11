@@ -17,10 +17,13 @@ $(info ------------------------------------------)
 $(info Project: $(PROJECT_NAME) v$(PROJECT_VERSION))
 $(info ------------------------------------------)
 
-.PHONY: build b compile c run r test t check check-all test-all clippy rustdoc fmt fmt-check clean verify release help h
+.PHONY: build build-release b compile c run r test t check check-all test-all clippy rustdoc fmt fmt-check clean verify release help h
 
 build:
 	@$(CARGO) build --all-targets
+
+build-release:
+	@$(CARGO) build --release --locked --bin virtty
 
 b: build
 
@@ -83,6 +86,7 @@ help:
 	@echo
 	@echo "Available targets:"
 	@echo "  build        Build the library, binary, and examples"
+	@echo "  build-release Build the optimized release executable"
 	@echo "  compile      Clean and rebuild"
 	@echo "  run          Run virtty (pass ARGS='--help' for usage)"
 	@echo "  test         Run all tests"

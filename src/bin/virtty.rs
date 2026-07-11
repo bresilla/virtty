@@ -4,7 +4,7 @@ use virtty::{incus::IncusClient, tui};
 
 fn usage() {
     eprintln!(
-        "virtty - terminal control plane for Incus\n\nUSAGE:\n    virtty [--socket PATH | --remote URL [TLS OPTIONS]]\n\nOPTIONS:\n    --socket PATH         Local Incus Unix socket (default: /var/lib/incus/unix.socket)\n    --remote URL          Remote Incus HTTPS endpoint\n    --client-cert PATH    PEM client certificate for the remote\n    --client-key PATH     PEM client private key for the remote\n    --server-ca PATH      Optional private CA certificate for the remote\n    -h, --help            Print this help"
+        "virtty - terminal control plane for Incus\n\nUSAGE:\n    virtty [--socket PATH | --remote URL [TLS OPTIONS]]\n\nOPTIONS:\n    --socket PATH         Local Incus Unix socket (default: /var/lib/incus/unix.socket)\n    --remote URL          Remote Incus HTTPS endpoint\n    --client-cert PATH    PEM client certificate for the remote\n    --client-key PATH     PEM client private key for the remote\n    --server-ca PATH      Optional private CA certificate for the remote\n    -h, --help            Print this help\n    -V, --version         Print version"
     );
 }
 
@@ -44,6 +44,13 @@ fn client_from_args() -> Result<Option<IncusClient>, Box<dyn Error>> {
 
 #[tokio::main]
 async fn main() -> ExitCode {
+    if env::args().nth(1).as_deref().is_some_and(|argument| {
+        matches!(argument, "-V" | "--version") && env::args().nth(2).is_none()
+    }) {
+        println!("virtty {}", env!("CARGO_PKG_VERSION"));
+        return ExitCode::SUCCESS;
+    }
+
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .with_target(false)
