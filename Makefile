@@ -23,7 +23,7 @@ build:
 	@$(CARGO) build --all-targets
 
 build-release:
-	@$(CARGO) build --release --locked --bin virtty
+	@$(CARGO) build --release --bin virtty
 
 b: build
 
